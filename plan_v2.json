@@ -1,0 +1,267 @@
+[
+  {
+    "step": "Read and analyze the backend dependencies from pom.xml",
+    "sub_steps": [
+      "Open /home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/springapp/pom.xml and read all dependencies.",
+      "Take note of starter dependencies (web, data-jpa, validation, mysql, openapi).",
+      "Confirm MySQL is used as the datasource according to /springapp/src/main/resources/application.properties."
+    ],
+    "files_to_add": [],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/springapp/pom.xml",
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/springapp/src/main/resources/application.properties"
+    ],
+    "description": "This step is necessary to ensure we use the correct backend dependencies and data source before implementing any backend functionality. It also informs later use of annotations, JPA features, and DB setup."
+  },
+  {
+    "step": "Implement Pet and AdoptionRequest entities with JPA validation",
+    "sub_steps": [
+      "Create Pet entity with required fields and validation annotations as per requirements.",
+      "Create AdoptionRequest entity with required fields and validation annotations as per requirements.",
+      "Include correct adoption status and validation (name, species, breed, age, description length, etc.).",
+      "Ensure both entities use @Entity and @Table annotations."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/springapp/src/main/java/com/examly/springapp/model/Pet.java",
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/springapp/src/main/java/com/examly/springapp/model/AdoptionRequest.java"
+    ],
+    "files_to_edit": [],
+    "description": "Defines the structure of pet and adoption request data in the backend. Sets up validation rules as dictated by the requirements and referenced in test cases."
+  },
+  {
+    "step": "Implement JPA repositories for Pet and AdoptionRequest",
+    "sub_steps": [
+      "Create PetRepository interface extending JpaRepository.",
+      "Create AdoptionRequestRepository interface extending JpaRepository."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/springapp/src/main/java/com/examly/springapp/repository/PetRepository.java",
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/springapp/src/main/java/com/examly/springapp/repository/AdoptionRequestRepository.java"
+    ],
+    "files_to_edit": [],
+    "description": "Provides data access mechanisms for the Pet and AdoptionRequest entities, needed for service and controller layers."
+  },
+  {
+    "step": "Implement PetService and AdoptionRequestService classes with business logic",
+    "sub_steps": [
+      "PetService: CRUD methods for pets, including validation and status management.",
+      "AdoptionRequestService: Creation and retrieval of adoption requests, validating business logic (pet existence, availability, status update)."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/springapp/src/main/java/com/examly/springapp/service/PetService.java",
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/springapp/src/main/java/com/examly/springapp/service/AdoptionRequestService.java"
+    ],
+    "files_to_edit": [],
+    "description": "Encapsulates business logic and acts as a bridge between controller and repository layers for both major models."
+  },
+  {
+    "step": "Implement REST controllers for Pet and AdoptionRequest with error and validation handling",
+    "sub_steps": [
+      "Implement PetController exposing /api/pets endpoints with detailed error/validation messaging.",
+      "Implement AdoptionRequestController exposing /api/adoption-requests endpoints, including business logic enforcement.",
+      "Return proper HTTP status codes and error message structures as specified in requirements and test cases."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/springapp/src/main/java/com/examly/springapp/controller/PetController.java",
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/springapp/src/main/java/com/examly/springapp/controller/AdoptionRequestController.java"
+    ],
+    "files_to_edit": [],
+    "description": "Exposes all specified endpoints with correct contracts and error handling, matching requirements and allowing frontend to properly consume and test backend functionality."
+  },
+  {
+    "step": "Implement centralized exception handling for validation and business errors",
+    "sub_steps": [
+      "Add a @ControllerAdvice class for handling MethodArgumentNotValidException, EntityNotFound, and custom business errors.",
+      "Return error responses with correct formats as expected by test cases."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/springapp/src/main/java/com/examly/springapp/exception/GlobalExceptionHandler.java"
+    ],
+    "files_to_edit": [],
+    "description": "Ensures that all endpoints return the expected error messages and codes as described, and required by test coverage."
+  },
+  {
+    "step": "Configure CORS to allow React frontend to access backend endpoints",
+    "sub_steps": [
+      "Add CORS configuration in Spring to allow requests from http://localhost:3000 (React default) or all origins as needed."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/springapp/src/main/java/com/examly/springapp/config/CorsConfig.java"
+    ],
+    "files_to_edit": [],
+    "description": "Allows the React frontend to communicate with backend APIs without CORS issues."
+  },
+  {
+    "step": "Implement all backend JUnit test cases as specified",
+    "sub_steps": [
+      "For each backend test case in the Test Cases JSON, create or update a test class:",
+      "testGetAllPets: Test GET /api/pets with multiple pets, validate status and response.",
+      "testGetPetById: Test GET /api/pets/{id} with valid and invalid IDs, including error cases.",
+      "testCreatePet: Test POST /api/pets for valid and invalid data, ensuring database persistence and error messages.",
+      "testCreateAdoptionRequest: Test POST /api/adoption-requests for valid and invalid scenarios, status transition, error messages.",
+      "testGetAllAdoptionRequests: Test GET /api/adoption-requests returns all requests with correct status.",
+      "Use appropriate mocks/stubs for DB, and test error, positive, and edge cases per the test descriptions."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/springapp/src/test/java/com/examly/springapp/controller/PetControllerTest.java",
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/springapp/src/test/java/com/examly/springapp/controller/AdoptionRequestControllerTest.java"
+    ],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/springapp/src/test/java/com/examly/springapp/PetAdoptionManagementSystemApplicationTests.java"
+    ],
+    "description": "Implements all backend JUnit test cases as listed in the JSON, including creation, validation, status changing, and error scenarios. Supports backend code by ensuring proper test coverage and adherence to requirements."
+  },
+  {
+    "step": "Compile and run all backend tests",
+    "sub_steps": [
+      "Run 'mvn clean compile -q -Dspring.main.banner-mode=off' in /springapp to ensure code compiles.",
+      "Run 'mvn test -q -Dspring.main.banner-mode=off' to execute backend test cases.",
+      "Run 'mvn clean install -q -Dspring.main.banner-mode=off' to install and verify project consistency."
+    ],
+    "files_to_add": [],
+    "files_to_edit": [],
+    "description": "Establishes that all backend logic is valid and test coverage is in place. Confirms that backend code is production ready before moving to the frontend."
+  },
+  {
+    "step": "Read and analyze frontend dependencies from package.json and existing React structure",
+    "sub_steps": [
+      "Open /home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/reactapp/package.json and review dependencies (React, React Router, Axios, Testing Library, etc).",
+      "Review directory structure in /reactapp/src for existing CSS, App.js, and index.js.",
+      "Plan component layout based on requirements (PetListing, PetDetails, AdoptionRequestForm, Filter, API helpers, etc)."
+    ],
+    "files_to_add": [],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/reactapp/package.json",
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/reactapp/src/App.js"
+    ],
+    "description": "Lays the foundation for frontend implementation by confirming package setup, configuration, and basic entry points."
+  },
+  {
+    "step": "Implement frontend utility files: API helper and constants",
+    "sub_steps": [
+      "Create src/utils/api.js: Wrapper for calling backend endpoints via Axios or fetch.",
+      "Create src/utils/constants.js: Contains reusable constants for species, statuses, and API URLs."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/reactapp/src/utils/api.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/reactapp/src/utils/constants.js"
+    ],
+    "files_to_edit": [],
+    "description": "Provides foundation for API communication and reusability in the React codebase."
+  },
+  {
+    "step": "Create PetListing React component and related CSS",
+    "sub_steps": [
+      "Implement components/PetListing.js to display all pets from the backend.",
+      "Include filter dropdowns for species and status, handle filter logic.",
+      "Display basic pet info (name, species, breed, age, adoption status, View Details button).",
+      "Apply mandatory CSS variables and styling requirements.",
+      "Wire navigation to PetDetails.",
+      "Create components/PetCard.js as a reusable subcomponent if needed."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/reactapp/src/components/PetListing.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/reactapp/src/components/PetListing.css"
+    ],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/reactapp/src/App.js"
+    ],
+    "description": "Implements the list and filtering UI for all pets and connects to backend endpoint. Supports frontend PetListing test coverage."
+  },
+  {
+    "step": "Create PetDetails React component, including conditional rendering for Adopt Me / status",
+    "sub_steps": [
+      "Implement components/PetDetails.js to display all information for a single pet.",
+      "Display image, all specified fields, and apply status-specific UI (colors, messages, Adopt Me button logic).",
+      "Integrate navigation with PetListing and form modal/dialog for adoption.",
+      "Apply required modern styling."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/reactapp/src/components/PetDetails.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/reactapp/src/components/PetDetails.css"
+    ],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/reactapp/src/App.js"
+    ],
+    "description": "Implements the detailed view, including adoption status messaging and Adopt Me functionality, enabling next step for adoption request feature and validation testing."
+  },
+  {
+    "step": "Create AdoptionRequestForm React component with validation and API integration",
+    "sub_steps": [
+      "Implement components/AdoptionRequestForm.js with fields for applicant name, email, and phone.",
+      "Disable submit button until validation passes, display error messages next to fields.",
+      "On submit, POST data to backend, handle success and error scenarios.",
+      "Update UI to reflect pet status change as 'Pending'.",
+      "Apply required styling with CSS variables, button, error, container UX as in requirements."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/reactapp/src/components/AdoptionRequestForm.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/reactapp/src/components/AdoptionRequestForm.css"
+    ],
+    "files_to_edit": [],
+    "description": "Enables adoption request submission with real-time validation and error handling, fulfilling requirements and ensuring alignment with test case expectations."
+  },
+  {
+    "step": "Update App.js and routing to integrate all React components",
+    "sub_steps": [
+      "Setup React Router routes for PetListing, PetDetails, and modal/adoption form.",
+      "Ensure navigation and page state management works smoothly.",
+      "Include fallback routes and error boundaries as needed.",
+      "Wire up API helpers and shared context/state if required."
+    ],
+    "files_to_add": [],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/reactapp/src/App.js"
+    ],
+    "description": "Completes core app structure and navigation so that all pages can be directly accessed and tested."
+  },
+  {
+    "step": "Add global and component-specific CSS using CSS variables as per requirements",
+    "sub_steps": [
+      "Define CSS variables for colors, radius, spacing, etc., in src/index.css or a new CSS variables file.",
+      "Implement .btn-primary, .btn-secondary, .error, empty state classes.",
+      "Add/Update CSS for containers, form layout, flex/GAP, modern appearance.",
+      "Ensure all forms, cards, buttons, dropdowns follow design guidelines."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/reactapp/src/variables.css"
+    ],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/reactapp/src/index.css",
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/reactapp/src/components/PetListing.css",
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/reactapp/src/components/PetDetails.css",
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/reactapp/src/components/AdoptionRequestForm.css"
+    ],
+    "description": "Applies mandatory and modern UI patterns for accessible and usable user interface. Ensures visual feedback and state cues as needed by design and test validation."
+  },
+  {
+    "step": "Implement all frontend Jest test cases as specified",
+    "sub_steps": [
+      "Pet Listing Component: Mock GET /api/pets and verify correct display, cards, filter options, and button.",
+      "Pet Details Component: Mock GET /api/pets/{id} for different statuses, verify details rendering and Adopt Me button/message.",
+      "Adoption Request Form: Mock form state and submission, validate errors, submission, post-success UI, error messages.",
+      "Pet Filter Functionality: Test combining filters, handling empty results, correct state changes.",
+      "Ensure all test files are named *.test.js and placed alongside or in the same directory as their component.",
+      "Mock fetch or axios as needed (reset between tests), never manually call cleanup() - rely on proper unmount() and isolated renders."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/reactapp/src/components/PetListing.test.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/reactapp/src/components/PetDetails.test.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/a6164d10-ae8e-4b60-92f1-a66c92525745/reactapp/src/components/AdoptionRequestForm.test.js"
+    ],
+    "files_to_edit": [],
+    "description": "Implements all frontend test cases from the Test Cases JSON. Covers API mocking, UI states, validation, error handling, and state transitions as per requirements. Directly supports the core test coverage requirement."
+  },
+  {
+    "step": "Install, lint, build and run frontend React tests",
+    "sub_steps": [
+      "Run 'npm install' inside /reactapp to install dependencies.",
+      "Run 'npm run build' to ensure code compiles.",
+      "Run 'npx eslint src/ --fix' to auto-fix linting issues.",
+      "Run 'npm run test:ci' to execute provided Jest tests and verify code correctness."
+    ],
+    "files_to_add": [],
+    "files_to_edit": [],
+    "description": "This step ensures all frontend code is correct, tests pass and the code follows best practices and standards before final delivery."
+  }
+]
