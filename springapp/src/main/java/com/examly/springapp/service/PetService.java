@@ -11,8 +11,16 @@ public class PetService {
 
     @Autowired
     PetRepository petRepository;
-    public Pet create(Pet pet) {
+    public Pet createPet(Pet pet) {
         return petRepository.save(pet);
+    }
+    public Object getPetById(long l) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getPetById'");
+    }
+    public Object getAllPets() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getAllPets'");
     }
 
 }

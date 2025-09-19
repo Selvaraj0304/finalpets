@@ -20,7 +20,7 @@ public class PetController {
 
     @PostMapping("/api/pets")
     public ResponseEntity<Pet> postpet(@RequestBody Pet pet){
-        Pet createdpet=petService.create(pet);
+        Pet createdpet=petService.createPet(pet);
         URI loc=URI.create("/api/pets"+createdpet.getId());
         return ResponseEntity.created(loc).body(createdpet);
     }
