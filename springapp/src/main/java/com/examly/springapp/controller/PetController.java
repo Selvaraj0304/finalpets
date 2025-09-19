@@ -1,9 +1,11 @@
 package com.examly.springapp.controller;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,5 +25,9 @@ public class PetController {
         Pet createdpet=petService.createPet(pet);
         URI loc=URI.create("/api/pets"+createdpet.getId());
         return ResponseEntity.created(loc).body(createdpet);
+    }
+    @GetMapping("/api/pets")
+    public List<Pet> getall(){
+        return petService.getAllPets();
     }
 }
