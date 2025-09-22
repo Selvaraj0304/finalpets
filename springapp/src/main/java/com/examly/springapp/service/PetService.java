@@ -1,6 +1,7 @@
 package com.examly.springapp.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,9 +17,8 @@ public class PetService {
     public Pet createPet(Pet pet) {
         return petRepository.save(pet);
     }
-    public Object getPetById(long l) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPetById'");
+    public Optional<Pet> getPetById(Long l) {
+        return petRepository.findById(l);
     }
     public List<Pet> getAllPets() {
         return petRepository.findAll();
