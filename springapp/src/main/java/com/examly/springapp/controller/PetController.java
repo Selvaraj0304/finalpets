@@ -30,4 +30,5 @@ public class PetController {
     public List<Pet> getall(){
         return petService.getAllPets();
     }
+    @GetMapping("/api/pets/{id}")
 }
