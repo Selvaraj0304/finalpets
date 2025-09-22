@@ -14,15 +14,17 @@ public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "Name should not be empty")
+    @NotBlank(message = "name is required")
     private String name;
+    @NotBlank(message = "Required")
     private String species;
+    @NotBlank(message = "Required")
     private String breed;
-    @Min(value=10,message="Age should be atlease 10")
+    @Min(value=0,message="Negative age")
     private int age;
     private String description;
     private String imageUrl;
-    @Pattern(regexp="available|pending",message = "Given wrong status")
+    @Pattern(regexp="Available|Pending",message = "Invalid status")
     private String adoptionStatus;
     public Long getId() {
         return id;
