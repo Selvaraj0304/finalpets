@@ -4,7 +4,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Pet {
@@ -15,9 +18,11 @@ public class Pet {
     private String name;
     private String species;
     private String breed;
+    @Min(value=10,message="Age should be atlease 10")
     private int age;
     private String description;
     private String imageUrl;
+    @Pattern(regexp="available|pending",message = "Given wrong status")
     private String adoptionStatus;
     public Long getId() {
         return id;

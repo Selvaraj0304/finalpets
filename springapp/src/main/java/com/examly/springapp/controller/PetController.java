@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.examly.springapp.model.Pet;
 import com.examly.springapp.service.PetService;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class PetController {
 
@@ -28,7 +30,7 @@ public class PetController {
     PetService petService;
 
     @PostMapping("/api/pets")
-    public ResponseEntity<Pet> postpet(@RequestBody Pet pet){
+    public ResponseEntity<Pet> postpet(@Valid @RequestBody Pet pet){
         Pet createdpet=petService.createPet(pet);
         URI loc=URI.create("/api/pets"+createdpet.getId());
         return ResponseEntity.created(loc).body(createdpet);
