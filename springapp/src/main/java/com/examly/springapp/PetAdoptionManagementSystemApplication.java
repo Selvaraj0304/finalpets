@@ -9,7 +9,7 @@ public class PetAdoptionManagementSystemApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(PetAdoptionManagementSystemApplication.class, args);
-		System.out.println(new BcryptPasswordEncoder().encode("selva@123"));
+		System.out.println();
 	}
 
 }
