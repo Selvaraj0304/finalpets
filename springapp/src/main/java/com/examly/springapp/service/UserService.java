@@ -13,6 +13,7 @@ public class UserService {
 
     @Autowired
     PasswordEncoder ps;
+    @Autowired
     UserRepo repo;
     public User saveuser(User detail) {
        detail.setPassword(ps.encode(detail.getPassword()));
