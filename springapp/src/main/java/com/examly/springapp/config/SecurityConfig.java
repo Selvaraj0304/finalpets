@@ -19,8 +19,11 @@ public class SecurityConfig {
         .csrf().disable()
         .authorizeHttpRequests(auth->auth
         .requestMatchers("/register").permitAll()
-        )
-        
+        .requestMatchers("/login").permitAll()
+        .anyRequest().authenticated()
+        // anyRequest().permitAll()
+        ).formLogin();
+        return http.build();
     }
 }
 
