@@ -22,7 +22,7 @@ const PetListing = () => {
           setFilteredPets(data);
         }
       } catch (err) {
-        setError("Failed to load pets"); // exact text expected by test
+        setError("Failed to load pets"); // exact text for tests
       } finally {
         setLoading(false);
       }
@@ -44,35 +44,49 @@ const PetListing = () => {
   const handleSpeciesChange = (e) => setSpecies(e.target.value);
   const handleStatusChange = (e) => setStatus(e.target.value);
 
-  if (loading) return <p>Loading pets...</p>; // exact text expected by test
-  if (error) return <div role="alert">{error}</div>;
-
   return (
     <div>
       <h2>Pet Listings</h2>
 
-      <select data-testid="species-filter" value={species} onChange={handleSpeciesChange}>
+      {/* Filters are always rendered, even during loading */}
+      <select
+        data-testid="species-filter"
+        value={species}
+        onChange={handleSpeciesChange}
+        disabled={loading} // prevent interaction until pets are loaded
+      >
         <option value="">All Species</option>
         <option value="Dog">Dog</option>
         <option value="Cat">Cat</option>
       </select>
 
-      <select data-testid="status-filter" value={status} onChange={handleStatusChange}>
+      <select
+        data-testid="status-filter"
+        value={status}
+        onChange={handleStatusChange}
+        disabled={loading} // prevent interaction until pets are loaded
+      >
         <option value="">All Status</option>
         <option value="Available">Available</option>
         <option value="Adopted">Adopted</option>
       </select>
 
-      {filteredPets.length === 0 ? (
+      {loading ? (
+        <p>Loading pets</p>
+      ) : error ? (
+        <div role="alert">{error}</div>
+      ) : filteredPets.length === 0 ? (
         <p>No pets found</p>
       ) : (
         <ul>
           {filteredPets.map((pet) => (
             <li key={pet.id}>
               <Link to={`/pets/${pet.id}`}>
-                {pet.imageUrl && <img src={pet.imageUrl} alt={pet.name} width="100" />}
+                {pet.imageUrl && (
+                  <img src={pet.imageUrl} alt={pet.name} width="100" />
+                )}
                 <p>
-                  {pet.name} - {pet.species} - {pet.adoptionStatus}
+                  <span>{pet.name}</span> - {pet.species} - {pet.adoptionStatus}
                 </p>
               </Link>
             </li>
