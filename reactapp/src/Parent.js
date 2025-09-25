@@ -14,6 +14,16 @@ const Parent = () => {
       document.getElementById("txt").style.color="black";
 
     }
+    
+    useEffect(()=>{
+
+    });
+    useEffect(()=>{
+
+    },[]);
+    useEffect(()=>{
+
+    },[value]);
   return (
     <div>
        <h1 id="txt">The number is: {value}</h1>
