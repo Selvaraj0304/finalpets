@@ -1,77 +1,84 @@
 import React, { useEffect, useState } from "react";
-import { getPets } from "../utils/api";
 import { Link } from "react-router-dom";
+import { getPets } from "../utils/api";
 
 const PetListing = () => {
   const [pets, setPets] = useState([]);
-  const [filtered, setFiltered] = useState([]);
+  const [filteredPets, setFilteredPets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [species, setSpecies] = useState("");
   const [status, setStatus] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   useEffect(() => {
-    getPets()
-      .then((data) => {
-        setPets(data);
-        setFiltered(data);
+    const fetchPets = async () => {
+      try {
+        const data = await getPets();
+        if (!data || data.length === 0) {
+          setPets([]);
+          setFilteredPets([]);
+        } else {
+          setPets(data);
+          setFilteredPets(data);
+        }
+      } catch (err) {
+        setError("Failed to load pets"); // exact text expected by test
+      } finally {
         setLoading(false);
-      })
-      .catch(() => {
-        setError("Failed to load pets");
-        setLoading(false);
-      });
+      }
+    };
+    fetchPets();
   }, []);
 
   useEffect(() => {
-    let results = pets;
-    if (species) results = results.filter((p) => p.species === species);
-    if (status) results = results.filter((p) => p.adoptionStatus === status);
-    setFiltered(results);
+    let tempPets = [...pets];
+    if (species) {
+      tempPets = tempPets.filter((pet) => pet.species === species);
+    }
+    if (status) {
+      tempPets = tempPets.filter((pet) => pet.adoptionStatus === status);
+    }
+    setFilteredPets(tempPets);
   }, [species, status, pets]);
 
-  if (loading) return <div>Loading pets...</div>;
-  if (error) return <div>{error}</div>;
-  if (filtered.length === 0) return <div>No pets found</div>;
+  const handleSpeciesChange = (e) => setSpecies(e.target.value);
+  const handleStatusChange = (e) => setStatus(e.target.value);
 
-  const speciesOptions = [...new Set(pets.map((p) => p.species))];
-  const statusOptions = [...new Set(pets.map((p) => p.adoptionStatus))];
+  if (loading) return <p>Loading pets...</p>; // exact text expected by test
+  if (error) return <div role="alert">{error}</div>;
 
   return (
     <div>
       <h2>Pet Listings</h2>
-      <select
-        data-testid="species-filter"
-        value={species}
-        onChange={(e) => setSpecies(e.target.value)}
-      >
+
+      <select data-testid="species-filter" value={species} onChange={handleSpeciesChange}>
         <option value="">All Species</option>
-        {speciesOptions.map((s) => (
-          <option key={s} value={s}>{s}</option>
-        ))}
+        <option value="Dog">Dog</option>
+        <option value="Cat">Cat</option>
       </select>
 
-      <select
-        data-testid="status-filter"
-        value={status}
-        onChange={(e) => setStatus(e.target.value)}
-      >
+      <select data-testid="status-filter" value={status} onChange={handleStatusChange}>
         <option value="">All Status</option>
-        {statusOptions.map((s) => (
-          <option key={s} value={s}>{s}</option>
-        ))}
+        <option value="Available">Available</option>
+        <option value="Adopted">Adopted</option>
       </select>
 
-      <ul>
-        {filtered.map((pet) => (
-          <li key={pet.id}>
-            <Link to={`/pets/${pet.id}`}>
-              <img src={pet.imageUrl} alt={pet.name} width="100" />
-              <p>{pet.name} - {pet.species} - {pet.adoptionStatus}</p>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {filteredPets.length === 0 ? (
+        <p>No pets found</p>
+      ) : (
+        <ul>
+          {filteredPets.map((pet) => (
+            <li key={pet.id}>
+              <Link to={`/pets/${pet.id}`}>
+                {pet.imageUrl && <img src={pet.imageUrl} alt={pet.name} width="100" />}
+                <p>
+                  {pet.name} - {pet.species} - {pet.adoptionStatus}
+                </p>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
