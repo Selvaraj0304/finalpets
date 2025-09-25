@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Child from './Child'
 
 const Parent = () => {
@@ -27,7 +27,7 @@ const Parent = () => {
   return (
     <div>
       <h1 id="txt">The value2 is : {value2}</h1>
-       <h1 id="txt">The number is: {value1}</h1>
+       <h1 id="txt">The value1 is: {value1}</h1>
        <button onClick={add}>Click to add</button>
        <button onClick={reduce}>Click to reduce</button>
     </div>
