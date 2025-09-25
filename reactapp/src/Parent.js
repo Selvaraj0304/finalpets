@@ -2,12 +2,11 @@ import React from 'react'
 import Child from './Child'
 
 const Parent = () => {
+    const [number,setNumber]=useState(0);
+    setNumber(number+1);
   return (
     <div>
-        <Child name="Mobile" price="100$" quantity="3"/>
-        <Child name="Laptop" price="200$" quantity="2"/>
-        <Child name="Mobile" price="100$" quantity="3"/>
-        <Child name="Laptop" price="200$" quantity="2"/>
+       
     </div>
   )
 }
