@@ -1,6 +1,16 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart, clearCart } from "../redux/cartActions";
+import {
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
+  Button,
+  Divider,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const Cart = () => {
   const cartItems = useSelector((state) => state.cartItems);
@@ -10,25 +20,49 @@ const Cart = () => {
 
   return (
     <div style={{ padding: "20px" }}>
-      <h2>Cart</h2>
+      <Typography variant="h5" gutterBottom>
+        Your Cart
+      </Typography>
+      <Divider />
       {cartItems.length === 0 ? (
-        <p>No items in cart</p>
+        <Typography variant="body1" sx={{ mt: 2 }}>
+          Your cart is empty 🛒
+        </Typography>
       ) : (
-        <div>
-          {cartItems.map((item) => (
-            <div key={item.id} style={{ marginBottom: "10px" }}>
-              {item.name} - ₹{item.price}
-              <button
-                style={{ marginLeft: "10px" }}
-                onClick={() => dispatch(removeFromCart(item.id))}
+        <>
+          <List>
+            {cartItems.map((item) => (
+              <ListItem
+                key={item.id}
+                secondaryAction={
+                  <IconButton
+                    edge="end"
+                    onClick={() => dispatch(removeFromCart(item.id))}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                }
               >
-                Remove
-              </button>
-            </div>
-          ))}
-          <h3>Total: ₹{total}</h3>
-          <button onClick={() => dispatch(clearCart())}>Clear Cart</button>
-        </div>
+                <ListItemText
+                  primary={item.name}
+                  secondary={`₹${item.price}`}
+                />
+              </ListItem>
+            ))}
+          </List>
+          <Divider />
+          <Typography variant="h6" sx={{ mt: 2 }}>
+            Total: ₹{total}
+          </Typography>
+          <Button
+            variant="outlined"
+            color="error"
+            sx={{ mt: 2 }}
+            onClick={() => dispatch(clearCart())}
+          >
+            Clear Cart
+          </Button>
+        </>
       )}
     </div>
   );
