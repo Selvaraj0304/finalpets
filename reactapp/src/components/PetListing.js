@@ -1,6 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getPets } from "../utils/api";
+import {
+  Box,
+  TextField,
+  MenuItem,
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  CircularProgress,
+  Alert,
+  CardMedia,
+} from "@mui/material";
 
 const PetListing = () => {
   const [pets, setPets] = useState([]);
@@ -9,6 +21,8 @@ const PetListing = () => {
   const [error, setError] = useState(null);
   const [species, setSpecies] = useState("");
   const [status, setStatus] = useState("");
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("");
 
   useEffect(() => {
     const fetchPets = async () => {
@@ -21,8 +35,8 @@ const PetListing = () => {
           setPets(data);
           setFilteredPets(data);
         }
-      } catch (err) {
-        setError("Failed to load pets"); // exact text for tests
+      } catch {
+        setError("Failed to load pets");
       } finally {
         setLoading(false);
       }
@@ -31,69 +45,135 @@ const PetListing = () => {
   }, []);
 
   useEffect(() => {
-    let tempPets = [...pets];
-    if (species) {
-      tempPets = tempPets.filter((pet) => pet.species === species);
-    }
-    if (status) {
-      tempPets = tempPets.filter((pet) => pet.adoptionStatus === status);
-    }
-    setFilteredPets(tempPets);
-  }, [species, status, pets]);
+    let temp = [...pets];
+    if (species) temp = temp.filter((p) => p.species === species);
+    if (status) temp = temp.filter((p) => p.adoptionStatus === status);
+    if (search)
+      temp = temp.filter((p) =>
+        p.name.toLowerCase().includes(search.toLowerCase())
+      );
+    if (sort === "ageAsc") temp.sort((a, b) => a.age - b.age);
+    if (sort === "ageDesc") temp.sort((a, b) => b.age - a.age);
+    setFilteredPets(temp);
+  }, [species, status, search, sort, pets]);
 
-  const handleSpeciesChange = (e) => setSpecies(e.target.value);
-  const handleStatusChange = (e) => setStatus(e.target.value);
+  if (loading)
+    return (
+      <Box textAlign="center" mt={5}>
+        <CircularProgress />
+      </Box>
+    );
+  if (error) return <Alert severity="error">{error}</Alert>;
 
   return (
-    <div>
-      <h2>Pet Listings</h2>
-
-      {/* Filters are always rendered, even during loading */}
-      <select
-        data-testid="species-filter"
-        value={species}
-        onChange={handleSpeciesChange}
-        disabled={loading} // prevent interaction until pets are loaded
+    <Box sx={{ p: 3 }}>
+      {/* Filters */}
+      <Box
+        display="flex"
+        flexWrap="wrap"
+        gap={2}
+        mb={3}
+        justifyContent="space-between"
       >
-        <option value="">All Species</option>
-        <option value="Dog">Dog</option>
-        <option value="Cat">Cat</option>
-      </select>
+        <TextField
+          select
+          label="Species"
+          value={species}
+          onChange={(e) => setSpecies(e.target.value)}
+          fullWidth
+          sx={{ minWidth: 180, flex: 1 }}
+        >
+          <MenuItem value="">All</MenuItem>
+          <MenuItem value="Dog">Dog</MenuItem>
+          <MenuItem value="Cat">Cat</MenuItem>
+        </TextField>
 
-      <select
-        data-testid="status-filter"
-        value={status}
-        onChange={handleStatusChange}
-        disabled={loading} // prevent interaction until pets are loaded
-      >
-        <option value="">All Status</option>
-        <option value="Available">Available</option>
-        <option value="Adopted">Adopted</option>
-      </select>
+        <TextField
+          select
+          label="Status"
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+          fullWidth
+          sx={{ minWidth: 180, flex: 1 }}
+        >
+          <MenuItem value="">All</MenuItem>
+          <MenuItem value="Available">Available</MenuItem>
+          <MenuItem value="Pending">Pending</MenuItem>
+        </TextField>
 
-      {loading ? (
-        <p>Loading pets</p>
-      ) : error ? (
-        <div role="alert">{error}</div>
-      ) : filteredPets.length === 0 ? (
-        <p>No pets found</p>
-      ) : (
-        <ul>
-          {filteredPets.map((pet) => (
-            <li key={pet.id}>
-              <Link to={`/pets/${pet.id}`}>
+        <TextField
+          label="Search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          fullWidth
+          sx={{ minWidth: 180, flex: 1 }}
+        />
+
+        <TextField
+          select
+          label="Sort by Age"
+          value={sort}
+          onChange={(e) => setSort(e.target.value)}
+          fullWidth
+          sx={{ minWidth: 180, flex: 1 }}
+        >
+          <MenuItem value="">None</MenuItem>
+          <MenuItem value="ageAsc">Ascending</MenuItem>
+          <MenuItem value="ageDesc">Descending</MenuItem>
+        </TextField>
+      </Box>
+
+      {/* Pet Cards */}
+      <Grid container spacing={3}>
+        {filteredPets.length === 0 ? (
+          <Typography>No pets found</Typography>
+        ) : (
+          filteredPets.map((pet) => (
+            <Grid item xs={12} sm={6} md={4} key={pet.id}>
+              <Card
+                sx={{
+                  transition: "transform 0.3s, box-shadow 0.3s",
+                  "&:hover": {
+                    transform: "translateY(-8px)",
+                    boxShadow: 6,
+                  },
+                  cursor: "pointer",
+                  borderRadius: 3,
+                }}
+              >
                 {pet.imageUrl && (
-                  <img src={pet.imageUrl} alt={pet.name} width="100" />
+                  <CardMedia
+                    component="img"
+                    height="220"
+                    image={pet.imageUrl}
+                    alt={pet.name}
+                  />
                 )}
-                <p>
-                  <span>{pet.name}</span> - {pet.species} - {pet.adoptionStatus}
-                </p>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    {pet.name}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    {pet.species} | {pet.breed} | {pet.age} months
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Status: {pet.adoptionStatus}
+                  </Typography>
+                  <Box mt={1}>
+                    <Link
+                      to={`/pets/${pet.id}`}
+                      style={{ textDecoration: "none", color: "#388E3C" }}
+                    >
+                      View Details
+                    </Link>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))
+        )}
+      </Grid>
+    </Box>
   );
 };
 

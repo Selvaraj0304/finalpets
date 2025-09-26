@@ -1,4 +1,4 @@
-const API_BASE = "https://8080-ccfbdecabcaae334371528adaaadfdebeathree.premiumproject.examly.io";
+const API_BASE = "https://8080-ccfbdecabcaae334371528adaaadfdebeathree.premiumproject.examly.io/api";
 
 export const getPets = async () => {
   const response = await fetch(`${API_BASE}/pets`);
@@ -9,5 +9,15 @@ export const getPets = async () => {
 export const getPetById = async (id) => {
   const response = await fetch(`${API_BASE}/pets/${id}`);
   if (!response.ok) throw new Error("Could not fetch pet details");
+  return response.json();
+};
+
+export const createPet = async (pet) => {
+  const response = await fetch(`${API_BASE}/pets`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(pet),
+  });
+  if (!response.ok) throw new Error("Failed to create pet");
   return response.json();
 };
