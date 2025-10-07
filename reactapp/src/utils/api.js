@@ -1,4 +1,4 @@
-const API_BASE = "https://8080-ccfbdecabcaae334371528adaaadfdebeathree.premiumproject.examly.io/api";
+const API_BASE = "http://localhost:8080/api";
 
 export const getPets = async () => {
   const response = await fetch(`${API_BASE}/pets`);

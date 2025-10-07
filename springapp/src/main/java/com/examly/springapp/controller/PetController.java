@@ -25,7 +25,7 @@ import com.examly.springapp.service.PetService;
 import jakarta.validation.Valid;
 
 @RestController
-@CrossOrigin(origins = "https://8081-ccfbdecabcaae334371528adaaadfdebeathree.premiumproject.examly.io")
+@CrossOrigin(origins = "http://localhost:3000")
 public class PetController {
 
     @Autowired
