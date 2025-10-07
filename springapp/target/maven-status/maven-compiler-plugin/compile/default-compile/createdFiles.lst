@@ -1,0 +1,10 @@
+com\examly\springapp\controller\PetController.class
+com\examly\springapp\repository\PetRepository.class
+com\examly\springapp\controller\AdoptionRequestController.class
+com\examly\springapp\service\AdoptionRequestService.class
+com\examly\springapp\model\Pet.class
+com\examly\springapp\repository\AdoptionRequestRepository.class
+com\examly\springapp\exception\GlobalExceptionHandler.class
+com\examly\springapp\model\AdoptionRequest.class
+com\examly\springapp\service\PetService.class
+com\examly\springapp\PetAdoptionManagementSystemApplication.class
